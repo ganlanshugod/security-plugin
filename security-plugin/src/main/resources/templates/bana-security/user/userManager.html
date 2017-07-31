@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="zh-CN">
+<head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>用户管理页面</title>
+		<th:block th:include="bana-security/header :: common-include"></th:block>
+        <!-- CSS -->
+        
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap-table/dist/bootstrap-table.min.css}"/>
+        <script type="text/javascript" th:src="@{/webjars/bootstrap-table/dist/bootstrap-table.min.js}"></script>
+    	<script th:src="@{/assets/js/bootstrap-table-extends.js}"></script>
+    
+    	<!-- bootstrap validate -->
+    	<link rel="stylesheet" th:href="@{/webjars/bootstrapvalidator/css/bootstrapValidator.min.css}"/>
+        <script type="text/javascript" th:src="@{/webjars/bootstrapvalidator/js/bootstrapValidator.min.js}"></script>
+    
+    </head>
+
+    <body>
+    	<div th:include="bana-security/header :: header"></div>
+    	<!-- 表格内容 -->
+		<div class="container" style="padding-top:20px">
+			<div id="toolbar">
+				<button id="add" class="btn btn-success" data-toggle="modal" data-target="#addModal">
+		            <i class="glyphicon glyphicon-plus"></i> 添加
+		        </button>
+		        <button id="remove" class="btn btn-danger" disabled="disabled">
+		            <i class="glyphicon glyphicon-remove"></i> 删除
+		        </button>
+		    </div>
+			<table id="userTable" data-toggle="table"
+					data-striped="true" 
+					data-toolbar="#toolbar"
+					data-search="true"
+           			data-show-refresh="true"
+           			data-show-columns="true"
+           			data-minimum-count-columns="2" 
+           			data-id-field="username"
+           			data-unique-id="username"
+           			th:attr="data-url=@{/user/list}"
+           			data-pagination="true"
+           			data-side-pagination="server"
+           			data-page-size="5"
+           			data-query-params-type="page"
+           			data-query-params="queryParams"
+           >
+			    <thead>
+			        <tr>
+			        	<th data-checkbox="true"></th>
+			            <th data-formatter="bootstrapTable.index">序号</th>
+			            <th data-field="username">用户姓名</th>
+			            <th data-field="enabled">用户状态</th>
+			            <th data-field="authorities" data-formatter="rolesToString">用户角色</th>
+			            <th class="text-right">操作</th>
+			        </tr>
+			    </thead>
+			    <!-- <tbody>
+			       <tr th:each="user,iterStat : ${users}">
+			       		<td data-checkbox="true"></td>
+						<td th:text="${iterStat.index + 1}"></td>
+						<td data-field="username" th:text="${user.username}"></td>
+						<td data-field="enabled" th:text="${user.enabled}"></td>
+						<td data-field="authorities" th:text="${user.authorities}"></td>
+						<td class="text-right">
+							<a th:href="'javascript:updateUser(\'' + ${user.username} + '\');'">修改</a>&nbsp;&nbsp;
+							<a th:href="'javascript:deleteUser(\'' + ${user.username} + '\');'">删除</a>
+						</td>
+					</tr>    
+			    </tbody> -->
+			</table>
+			
+			<!-- 增加用户功能区域 -->
+			<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+			    <div class="modal-dialog modal-lg">
+			        <div class="modal-content">
+			            <div class="modal-header">
+			                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			                <h4 class="modal-title" id="addModalLabel">添加一个用户</h4>
+			            </div>
+			            <div class="modal-body">
+							<form class="form-horizontal" id="addUserForm" th:action="@{/user/add}" method="post"
+								data-bv-message="This value is not valid"
+                      			data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                      			data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                      			data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+								<div class="form-group">
+								    <label for="username" class="col-sm-2 control-label">用户名</label>
+								    <div class="col-sm-9">
+								      <input type="text"  name="username" class="form-control" id="username" placeholder="请填写用户名"
+								      	required="required" data-bv-notempty-message="用户名不能为空" 
+								      	data-bv-stringlength="true" data-bv-stringlength-min="4" data-bv-stringlength-max="30" data-bv-stringlength-message="这个字段长度不得小于4，不得超过30"
+								      	/>
+								    </div>
+								 </div>
+								 <div class="form-group">
+								    <label for="password" class="col-sm-2 control-label">密码</label>
+								    <div class="col-sm-9">
+								      <input type="password" name="password" class="form-control" id="password" placeholder="请填写密码"
+								      required="required" data-bv-notempty-message="密码不能为空" 
+								      data-bv-stringlength="true" data-bv-stringlength-min="6" data-bv-stringlength-max="30" data-bv-stringlength-message="这个字段长度不得小于6，不得超过30"
+								      />
+								    </div>
+								 </div>
+								 <div class="form-group">
+								    <label for="repeatPassword" class="col-sm-2 control-label">重复密码</label>
+								    <div class="col-sm-9">
+								      <input type="password" name="repeatPassword" class="form-control" id="repeatPassword" placeholder="请重复填写密码"
+								       required="required" data-bv-notempty-message="重复密码不能为空" 
+								       data-bv-identical="true" data-bv-identical-field="password" data-bv-identical-message="重复密码与密码不同"
+								      />
+								    </div>
+								 </div>
+								 <div class="form-group">
+								    <div class="col-sm-offset-2 col-sm-10">
+								      <div class="checkbox">
+								        <label>
+								          <input type="checkbox" name="admin"/> 是否是管理员
+								        </label>
+								      </div>
+								    </div>
+								 </div>
+							</form>
+						</div>
+			            <div class="modal-footer">
+			                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			                <button type="submit" class="btn btn-primary" id="addUserSubmit">保存用户</button>
+			            </div>
+			        </div><!-- /.modal-content -->
+			    </div><!-- /.modal -->
+			</div>
+		</div>
+		
+		<!-- 修改用户的接口 -->
+		<script id="update-form-template" type="text/x-handlebars-template">
+		<div class="container-fluid">
+			<form class="form-horizontal" id="updateUserForm" th:action="@{/user/update}" method="post" onsubmit="return false;"
+				data-bv-message="This value is not valid"
+                data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+				<div class="form-group">
+				    <label for="username" class="col-sm-2 control-label">用户名</label>
+				    <div class="col-sm-9">
+				      <input type="text"  name="showname" class="form-control" id="showname" placeholder="请填写用户名"
+				      	value="{{username}}" disabled="disabled"
+						required="required" data-bv-notempty-message="用户名不能为空" 
+				      	data-bv-stringlength="true" data-bv-stringlength-min="4" data-bv-stringlength-max="30" data-bv-stringlength-message="这个字段长度不得小于4，不得超过30"
+				      	/>
+					  <input type="hidden"  name="username" class="form-control" id="username" placeholder="请填写用户名"
+				      	value="{{username}}"
+						required="required" data-bv-notempty-message="用户名不能为空" 
+				      	data-bv-stringlength="true" data-bv-stringlength-min="4" data-bv-stringlength-max="30" data-bv-stringlength-message="这个字段长度不得小于4，不得超过30"
+				      	/>
+				    </div>
+				 </div>
+				 <div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+				      <div class="checkbox">
+				        <label>
+							{{#if enabled}}
+								<input type="checkbox" name="enabled" checked="checked"/> 是否可用
+							{{else}}
+								<input type="checkbox" name="enabled"/> 是否可用
+							{{/if}}
+				          
+				        </label>
+				      </div>
+				    </div>
+				 </div>
+				 <div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+				      <div class="checkbox">
+				        <label>
+							{{#contains authorities 'ROLE_ADMIN'}}
+				          		<input type="checkbox" name="admin" checked="checked"/> 是否是管理员
+							{{else}}
+								<input type="checkbox" name="admin"/> 是否是管理员
+							{{/contains}}
+				        </label>
+				      </div>
+				    </div>
+				 </div>
+			</form>
+		</div>
+		</script>
+		<style type="text/css">
+			#updateUserForm {
+				padding-top:20px;
+			}
+		</style>
+		<script type="text/javascript" th:src="@{/webjars/handlebars/handlebars.min.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/js/handlebars-help.js}"></script>
+		
+		<script th:inline="javascript">
+			var rootUrl = [[@{/}]];
+		</script>
+		
+		<!-- 添加用户的表单处理方法 -->
+		<script type="text/javascript">
+		var rolesToString = function(value,row,index){
+			var arr = new Array();
+			for(v in value){
+				arr.push(value[v].authority);
+			}
+			return '[' + arr.toString() + ']';
+		}
+		
+		var queryParams = function(params){
+			console.log("html queryParams");
+			return params;
+		}
+				$(function(){
+					//初始化表格数据l
+					/* $("#userTable").bootstrapTable({
+						
+					}); */
+					$("#addUserSubmit").click(function(){
+						$("#addUserForm").submit();
+					});
+					$("form").bootstrapValidator({
+						/* message: 'This value is not valid',
+			            　		feedbackIcons: {
+			                　　　　　　　　	valid: 'glyphicon glyphicon-ok',
+			                　　　　　　　　	invalid: 'glyphicon glyphicon-remove',
+			                　　　　　　　　	validating: 'glyphicon glyphicon-refresh'
+			            　　　　　　	},
+			            　　　　　　	fields: {
+	                        username: {
+	                            message: '用户名验证失败',
+	                            validators: {
+	                                notEmpty: {
+	                                    message: '用户名不能为空'
+	                                },
+	                                stringLength: {  
+	                                    min: 6,  
+	                                    max: 30,  
+	                                    message: '用户名长度为6~30'  
+	                                }  
+	                            }
+	                        },
+	                        password: {
+	                            validators: {
+	                                notEmpty: {
+	                                    message: '密码不能为空'
+	                                },
+	                                stringLength: {  
+	                                    min: 6,  
+	                                    max: 30,  
+	                                    message: '密码长度为6~30'  
+	                                }
+	                            }
+	                        }
+	                    } */
+					}).on('success.form.bv', function(e) {
+			            // Prevent form submission
+			            e.preventDefault();
+			            $("#addUserSubmit").prop('disabled',true);
+			            console.log("herererere");
+			            // Get the form instance
+			            var $form = $(e.target);
+			            // Get the BootstrapValidator instance
+			            var bv = $form.data('bootstrapValidator');
+			            console.log(bv);
+			            // Use Ajax to submit form data
+			            $.post($form.attr('action'), $form.serializeObject(), function(result) {
+			                console.log(result);
+			                if(result.resultCode == '200'){
+			                	toastr.success('添加成功');
+			                	$("#addModal").modal('hide');
+			                }else{
+			                	toastr.warning(result.errorMessage);
+			                }
+			            }, 'json').error(function() {
+			            	toastr.error("error"); 
+			            }).complete(function(){
+			            	$("#addUserSubmit").prop('disabled',false);
+			            });
+			        });
+			        //隐藏模态框时，清空表单，并取消对应的验证内容
+					$(".modal").on("hide.bs.modal", function() {
+						$(this).find("form")[0].reset();
+						$(this).find("form").data('bootstrapValidator').resetForm();
+					});
+			        //table的事件处理
+			        var $table = $("#userTable");
+			        $table.on('check.bs.table uncheck.bs.table ' +
+			                'check-all.bs.table uncheck-all.bs.table', function () {
+			            $("#remove").prop('disabled', !$table.bootstrapTable('getSelections').length);
+
+			            // save your data, here just save the current page
+			           var selections = getIdSelections();
+			            console.log(selections);
+			            // push or splice the selections if you want to save all data selections
+			        });
+			        
+					function getIdSelections() {
+				        return $.map($table.bootstrapTable('getSelections'), function (row) {
+				            return row.username
+				        });
+				    }
+					
+				});
+				var updateUserTemplate = Handlebars.compile($("#update-form-template").html());
+				//update user 
+				function updateUser(username){
+					if(!username){
+						toastr.warning('没有选中的用户');
+						return ;
+					}
+					console.log('修改用户' + username);
+					var row = $("#userTable").bootstrapTable('getRowByUniqueId',username);
+					layer.open({
+						type:1,
+						title:'用户 ' + row.username + ' 的信息修改',
+						area:["70%"],
+						content: updateUserTemplate(row),
+						btn:['保存','取消'],
+						success: function(layero, index){
+							console.log(layero, index);
+							layero.find("form").bootstrapValidator({})
+						},
+						yes:function(index,layero){
+				            console.log("herererere");
+				            console.log('yes',layero,index);
+				            // Get the form instance
+				            var $form = layero.find("form");
+				            // Get the BootstrapValidator instance
+				            // Use Ajax to submit form data
+				            $.post($form.attr('action'), $form.serializeObject(), function(result) {
+				                console.log(result);
+				                if(result.resultCode == '200'){
+				                	toastr.success('修改成功');
+				                }else{
+				                	toastr.warning(result.errorMessage);
+				                }
+				            }, 'json').error(function() {
+				            	toastr.error("error"); 
+				            }).complete(function(){
+				            	layer.close(index);
+				            });
+						},
+						btn2:function(index,layero){
+							console.log('no');
+							this.cancel(index,layero);
+						},
+						cancel: function(index, layero){ 
+							console.log('cancel');
+						}    
+					});
+				}
+				
+				function deleteUser(username){
+					if(!username){
+						toastr.warning('没有选中的用户');
+						return ;
+					}
+					console.log('删除用户' + username);
+					var row = $("#userTable").bootstrapTable('getRowByUniqueId',username);
+					
+					layer.confirm('是否要删除用户 ' + username + " ?", {icon: 3, title:'删除询问'}, function(index){
+					  	//do something
+					  	$.ajax({
+						 	url: rootUrl + 'user/delete',
+						 	type: 'POST',
+						 	data:{
+						 		username:username
+						 	},
+						 	success: function(result) {
+						  		// Do something with the result
+						 		if(result.resultCode == '200'){
+				                	toastr.success('删除成功');
+				                }else{
+				                	toastr.warning(result.errorMessage);
+				                }
+						 	},
+						 	error:function(xhr,message,ex){
+						 		toastr.error(message); 
+						 	},
+						 	complete:function(XHR, TS){
+						 		layer.close(index);
+						 	}
+						});
+					});
+				}
+		</script>
+    </body>
+</html>
