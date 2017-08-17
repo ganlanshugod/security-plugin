@@ -1,0 +1,2 @@
+# security-plugin
+springboot中使用security的自定义插件，提供了默认的登录用户管理等功能
