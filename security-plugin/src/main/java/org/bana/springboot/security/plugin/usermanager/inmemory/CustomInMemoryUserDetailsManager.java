@@ -7,7 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.bana.springboot.security.plugin.usermanager.CustomeUserDetailsManager;
+import org.bana.springboot.security.plugin.usermanager.pojo.UserDetailQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -45,27 +48,24 @@ public class CustomInMemoryUserDetailsManager extends InMemoryUserDetailsManager
 	}
 
 	/* (non-Javadoc)
-	 * @see org.bana.springboot.security.plugin.usermanager.CustomeUserDetailsManager#findAll(org.springframework.data.domain.Pageable)
+	 * @see org.bana.springboot.security.plugin.usermanager.CustomeUserDetailsManager#findAll(org.bana.springboot.security.plugin.usermanager.pojo.UserDetailQuery, org.springframework.data.domain.Pageable)
 	 */
 	@Override
-	public Page<UserDetails> findAll(Pageable pageable) {
+	public Page<UserDetails> findAll(UserDetailQuery queryParam, Pageable pageable) {
 		Collection<UserDetails> values = userForSelect.values();
 		Iterator<UserDetails> iterator = values.iterator();
+		String searchText = queryParam.getSearchText();
 		int begin = pageable.getOffset();
 		int pageSize = pageable.getPageSize();
-		int index = 0;
 		List<UserDetails> resultList = new ArrayList<UserDetails>();
 		while(iterator.hasNext()){
 			UserDetails next = iterator.next();
-			if(begin <= index){
+			
+			if(StringUtils.isBlank(searchText) || next.getUsername().contains(searchText)){
 				resultList.add(next);
 			}
-			index ++;
-			if(resultList.size() >= pageSize){
-				break;
-			}
 		}
-		return new PageImpl<UserDetails>(resultList, pageable, values.size());
+		return new PageImpl<UserDetails>(resultList.subList(begin, NumberUtils.min(new int[]{resultList.size(), pageSize})), pageable, resultList.size());
 	}
 	
 }

@@ -11,6 +11,7 @@
         
         <link rel="stylesheet" th:href="@{/webjars/bootstrap-table/dist/bootstrap-table.min.css}"/>
         <script type="text/javascript" th:src="@{/webjars/bootstrap-table/dist/bootstrap-table.min.js}"></script>
+        <script type="text/javascript" th:src="@{/webjars/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js}"></script>
     	<script th:src="@{/assets/js/bootstrap-table-extends.js}"></script>
     
     	<!-- bootstrap validate -->
@@ -21,8 +22,9 @@
 
     <body>
     	<div th:include="bana-security/header :: header"></div>
+    	
     	<!-- 表格内容 -->
-		<div class="container" style="padding-top:20px">
+		<div class="container" style="padding-top:20px" >
 			<div id="toolbar">
 				<button id="add" class="btn btn-success" data-toggle="modal" data-target="#addModal">
 		            <i class="glyphicon glyphicon-plus"></i> 添加
@@ -35,6 +37,7 @@
 					data-striped="true" 
 					data-toolbar="#toolbar"
 					data-search="true"
+					data-search-on-enter-key="true"
            			data-show-refresh="true"
            			data-show-columns="true"
            			data-minimum-count-columns="2" 
@@ -54,7 +57,7 @@
 			            <th data-field="username">用户姓名</th>
 			            <th data-field="enabled">用户状态</th>
 			            <th data-field="authorities" data-formatter="rolesToString">用户角色</th>
-			            <th class="text-right">操作</th>
+			            <th class="text-right" data-formatter="manager_btn">操作</th>
 			        </tr>
 			    </thead>
 			    <!-- <tbody>
@@ -208,6 +211,11 @@
 			return '[' + arr.toString() + ']';
 		}
 		
+		var manager_btn = function(value,row,index){
+			return '<a href="javascript:updateUser(\'' + row.username + '\');">修改</a>&nbsp;&nbsp;' + 
+			       '<a href="javascript:deleteUser(\'' + row.username + '\');">删除</a>';
+		}
+		
 		var queryParams = function(params){
 			console.log("html queryParams");
 			return params;
@@ -220,7 +228,7 @@
 					$("#addUserSubmit").click(function(){
 						$("#addUserForm").submit();
 					});
-					$("form").bootstrapValidator({
+					$("#addUserForm").bootstrapValidator({
 						/* message: 'This value is not valid',
 			            　		feedbackIcons: {
 			                　　　　　　　　	valid: 'glyphicon glyphicon-ok',
@@ -283,6 +291,7 @@
 					$(".modal").on("hide.bs.modal", function() {
 						$(this).find("form")[0].reset();
 						$(this).find("form").data('bootstrapValidator').resetForm();
+						$("#userTable").bootstrapTable("refresh",{silent: true});
 					});
 			        //table的事件处理
 			        var $table = $("#userTable");
@@ -340,6 +349,7 @@
 				            	toastr.error("error"); 
 				            }).complete(function(){
 				            	layer.close(index);
+				            	$("#userTable").bootstrapTable("refresh",{silent: true});
 				            });
 						},
 						btn2:function(index,layero){
@@ -381,6 +391,7 @@
 						 	},
 						 	complete:function(XHR, TS){
 						 		layer.close(index);
+						 		$("#userTable").bootstrapTable("refresh",{silent: true});
 						 	}
 						});
 					});

@@ -3,8 +3,12 @@
 	 * 重载bootstrapTable的方法或进行树形加强
 	 */
 	if(typeof $.fn.bootstrapTable === "function"){
+		$.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['zh-CN']);
 		$.fn.bootstrapTable2 = $.fn.bootstrapTable ;
 		$.fn.bootstrapTable = function(option){
+			if(typeof option === "string"){
+				return $.fn.bootstrapTable2.apply($(this),arguments);
+			}
 			option = option||{};
 			var opt = {
 				dataField:"content",

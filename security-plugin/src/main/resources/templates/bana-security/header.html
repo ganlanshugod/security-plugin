@@ -50,7 +50,7 @@
 	        <span class="icon-bar"></span>
 	      </button>
 	      <a class="navbar-brand" href="#"><img alt="Brand" th:src="@{/logo.png}" width="20px" height="20px"/></a>
-	      <a class="navbar-brand" href="#">Bana导航栏</a>
+	      <a class="navbar-brand" th:href="@{/}">Bana导航栏</a>
 	    </div>
 	
 	    <!-- Collect the nav links, forms, and other content for toggling -->
@@ -79,7 +79,7 @@
 	      </form>
 	      <ul class="nav navbar-nav navbar-right">
 	        <li><a href="#">Link</a></li>
-	        <li class="dropdown">
+	        <li sec:authorize="isAuthenticated()" class="dropdown">
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 	          <th:block th:text="${#authentication.name}"/> <span class="caret"></span>
 	          </a>

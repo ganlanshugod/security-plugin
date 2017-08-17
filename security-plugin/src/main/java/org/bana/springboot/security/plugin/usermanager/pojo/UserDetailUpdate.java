@@ -18,7 +18,7 @@ public class UserDetailUpdate implements Serializable{
 	private static final long serialVersionUID = 7814354508898153320L;
 
 	@NotBlank(message = "名称不能为空")
-    @Size(min=5, max=30, message = "名字长度必须在5和30之间")
+    @Size(min=4, max=30, message = "名字长度必须在5和30之间")
 	private String username;
 	
 	private boolean enabled;

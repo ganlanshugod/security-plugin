@@ -6,7 +6,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.bana.springboot.security.plugin.RestResponseResult;
+import org.bana.springboot.security.plugin.usermanager.pojo.JpaUser;
 import org.bana.springboot.security.plugin.usermanager.pojo.UserDetailAdd;
+import org.bana.springboot.security.plugin.usermanager.pojo.UserDetailQuery;
 import org.bana.springboot.security.plugin.usermanager.pojo.UserDetailUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -39,16 +42,18 @@ public class UserManagerController {
 	protected CustomeUserDetailsManager userDetailsManager;
 
 	@RequestMapping("/manager")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String toUserManger(Model model){
 		return "bana-security/user/userManager";
 	}
 	
 	@RequestMapping("/list")
 	@ResponseBody
-	public Page<UserDetails> userList(@PageableDefault Pageable pageable){
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public Page<UserDetails> userList(UserDetailQuery userQuery ,@PageableDefault Pageable pageable){
 		LOG.info("分页查询用户数据" + pageable.getOffset() + ":" + pageable.getPageNumber() + ";" + pageable.getPageSize());
 //		new PageRequest(request);
-		Page<UserDetails> findAll = userDetailsManager.findAll(pageable);
+		Page<UserDetails> findAll = userDetailsManager.findAll(userQuery,pageable);
 //		Page<UserDetails> list = new PageImpl<UserDetails>();
 		return findAll;
 	}
@@ -72,17 +77,17 @@ public class UserManagerController {
 	@RequestMapping(value="/update",method=RequestMethod.POST)
 	@ResponseBody
 	public RestResponseResult updateUser(@Valid UserDetailUpdate updateUser){
-		LOG.info("执行登录修改流程");
+		LOG.info("执行用户修改流程");
 		UserDetails user = userDetailsManager.loadUserByUsername(updateUser.getUsername());
 		if(user == null){
 			return new RestResponseResult("301","不存在的用户" + updateUser.getUsername());
 		}
-		if(user instanceof User){
+		if(user instanceof User || user instanceof JpaUser){
 			HashSet<GrantedAuthority> authorities = new HashSet<GrantedAuthority>(user.getAuthorities());
 			if(updateUser.isAdmin()){
-				authorities.add(new SimpleGrantedAuthority("ROLE_admin"));
+				authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 			}else{
-				authorities.remove(new SimpleGrantedAuthority("ROLE_admin"));
+				authorities.remove(new SimpleGrantedAuthority("ROLE_ADMIN"));
 			}
 			userDetailsManager.updateUser(new User(user.getUsername(), user.getPassword(), updateUser.isEnabled(), user.isAccountNonExpired(),
 					user.isCredentialsNonExpired(), user.isAccountNonLocked(), authorities));
@@ -110,11 +115,9 @@ public class UserManagerController {
 			}
 		}
 		
-		UserBuilder userBulider = User.withUsername(addUser.getUsername()).password(addUser.getPassword());
+		UserBuilder userBulider = User.withUsername(addUser.getUsername()).password(addUser.getPassword()).roles("USER");
 		if(addUser.isAdmin()){
-			userBulider.roles("admin");
-		}else{
-			userBulider.roles("user");
+			userBulider.roles("ADMIN");
 		}
 		userDetailsManager.createUser(userBulider.build());
 //		if(bindResult.hasErrors()){
