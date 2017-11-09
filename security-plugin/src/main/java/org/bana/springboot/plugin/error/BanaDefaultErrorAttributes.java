@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.bana.springboot.security.plugin.error;
+package org.bana.springboot.plugin.error;
 
 import java.util.ArrayList;
 import java.util.List;

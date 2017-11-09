@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.bana.springboot.security.plugin.error;
+package org.bana.springboot.plugin.error;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,7 +36,6 @@ import org.springframework.web.servlet.ModelAndView;
  * @author liuwenjie
  *
  */
-@Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
 public class BanaErrorController extends AbstractErrorController {
 	
@@ -74,16 +73,16 @@ public class BanaErrorController extends AbstractErrorController {
 		return (modelAndView == null ? new ModelAndView("error", model) : modelAndView);
 	}
 	
-	
-//	@RequestMapping
-//	@ResponseBody
-//	public RestResponseResult errorRest(HttpServletRequest request) {
-//		LOG.info("使用自定义的返回错误结果的controller");
-//		Map<String, Object> body = getErrorAttributes(request,
-//				isIncludeStackTrace(request, MediaType.ALL));
-//		HttpStatus status = getStatus(request);
-//		return new RestResponseResult(body);
-//	}
+	/// 注入使用自定义的返回结果的配置
+/*	@RequestMapping
+	@ResponseBody
+	public RestResponseResult errorRest(HttpServletRequest request) {
+		LOG.info("使用自定义的返回错误结果的controller");
+		Map<String, Object> body = getErrorAttributes(request,
+				isIncludeStackTrace(request, MediaType.ALL));
+		HttpStatus status = getStatus(request);
+		return new RestResponseResult(body);
+	}*/
 	
 	@RequestMapping
 	@ResponseBody
@@ -93,7 +92,8 @@ public class BanaErrorController extends AbstractErrorController {
 				isIncludeStackTrace(request, MediaType.ALL));
 //		RequestAttributes requestAttributes = new ServletRequestAttributes(request);
 		String exceptionName = (String)body.get("exception");
-		if(BindException.class.getName().equals(exceptionName)){//如果是bindResult的异常，比如参数绑定，那么我们就把他异常进行重新构造
+		//如果是bindResult的异常，比如参数绑定，那么我们就把他异常进行重新构造
+		if(BindException.class.getName().equals(exceptionName)){
 			LOG.info("BindResult类型的处理方式");
 			@SuppressWarnings("unchecked")
 			List<ObjectError> errorList = (List<ObjectError>)body.get("errors");
@@ -119,6 +119,7 @@ public class BanaErrorController extends AbstractErrorController {
 	/* (non-Javadoc)
 	 * @see org.springframework.boot.autoconfigure.web.ErrorController#getErrorPath()
 	 */
+	@Override
 	public String getErrorPath() {
 		return errorProperties.getPath();
 	}

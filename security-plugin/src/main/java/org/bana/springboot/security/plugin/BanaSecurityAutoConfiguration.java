@@ -5,8 +5,8 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.bana.common.util.basic.MD5Util;
-import org.bana.springboot.security.plugin.error.BanaDefaultErrorAttributes;
-import org.bana.springboot.security.plugin.error.BanaErrorController;
+import org.bana.springboot.plugin.error.BanaDefaultErrorAttributes;
+import org.bana.springboot.plugin.error.BanaErrorController;
 import org.bana.springboot.security.plugin.usermanager.CustomeUserDetailsManager;
 import org.bana.springboot.security.plugin.usermanager.LoginController;
 import org.bana.springboot.security.plugin.usermanager.RegisterController;
@@ -41,6 +41,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Configuration
 @EnableConfigurationProperties(BanaSecurityProperties.class)
@@ -49,7 +50,6 @@ import org.springframework.stereotype.Controller;
 @ConditionalOnClass(WebSecurityConfigurerAdapter.class)
 @AutoConfigureBefore(ErrorMvcAutoConfiguration.class)
 @AutoConfigureAfter({DispatcherServletAutoConfiguration.class,DataSourceAutoConfiguration.class})
-@Import(UserManagerController.class)
 public class BanaSecurityAutoConfiguration {
 	
 //	private static final Logger LOG = LoggerFactory.getLogger(BanaSecurityAutoConfiguration.class);
@@ -100,21 +100,22 @@ public class BanaSecurityAutoConfiguration {
 		//自動注入一个默认的注册的Controller类
 	}
 	
-//	@Controller
-//	@ConditionalOnProperty(prefix="bana.springboot.security",value="defaultUserManagerController",matchIfMissing=true)//可以是用bana.springboot.security.enabled=false屏蔽。matchIfMissing在没有配置时是否注入
-//	@ConditionalOnMissingBean(UserManagerController.class)
-//	@ConditionalOnBean(CustomeUserDetailsManager.class)
-//	public class DefaultUserManagerController extends UserManagerController{
-//		//自動注入一个默认的UserManager的Controller类
-//	}
-	
-	@Bean
+	@Controller
+	@RequestMapping("/user")
 	@ConditionalOnProperty(prefix="bana.springboot.security",value="defaultUserManagerController",matchIfMissing=true)//可以是用bana.springboot.security.enabled=false屏蔽。matchIfMissing在没有配置时是否注入
 	@ConditionalOnMissingBean(UserManagerController.class)
 	@ConditionalOnBean(CustomeUserDetailsManager.class)
-	public UserManagerController defaultUserManagerController(){
-		return new UserManagerController();
+	public class DefaultUserManagerController extends UserManagerController{
+		//自動注入一个默认的UserManager的Controller类
 	}
+	
+//	@Bean
+//	@ConditionalOnProperty(prefix="bana.springboot.security",value="defaultUserManagerController",matchIfMissing=true)//可以是用bana.springboot.security.enabled=false屏蔽。matchIfMissing在没有配置时是否注入
+//	@ConditionalOnMissingBean(UserManagerController.class)
+//	@ConditionalOnBean(CustomeUserDetailsManager.class)
+//	public UserManagerController defaultUserManagerController(){
+//		return new UserManagerController();
+//	}
 	
 	@Configuration
 	@AutoConfigureAfter(DataSourceAutoConfiguration.class)
@@ -140,10 +141,10 @@ public class BanaSecurityAutoConfiguration {
 	@ConditionalOnMissingBean(BanaWebSecurityConfig.class)
 	@ConditionalOnBean(DataSource.class)
 	@ConditionalOnProperty(prefix="bana.springboot.security",value="configType",havingValue="jdbc",matchIfMissing=true)
-	@Order(200)
+	@Order(50)
 	@Import({UserJpaAutoConfig.class})
 	@EnableGlobalMethodSecurity(prePostEnabled = true)//允许进入页面方法前检验
-	public class BanaJdbcWebSecurityConfigAutoConfig extends BanaWebSecurityConfig{
+	public static class BanaJdbcWebSecurityConfigAutoConfig extends BanaWebSecurityConfig{
 		
 		@Autowired
 		private DataSource dataSource;
