@@ -14,7 +14,7 @@ import org.junit.Test;
 public class UserManagerControllerTest {
 
 	/**
-	 * Test method for {@link org.bana.springboot.security.plugin.usermanager.UserManagerController#updateUser(org.bana.springboot.security.plugin.usermanager.pojo.UserDetailUpdate)}.
+	 * Test method for {@link org.bana.springboot.plugin.security.usermanager.UserManagerController#updateUser(org.bana.springboot.security.plugin.usermanager.pojo.UserDetailUpdate)}.
 	 */
 	@Test
 	public void testUpdateUser() {

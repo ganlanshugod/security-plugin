@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.bana.springboot.security.plugin.usermanager.jpa;
+package org.bana.springboot.plugin.security.usermanager.jpa;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,10 +11,10 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
-import org.bana.springboot.security.plugin.usermanager.CustomeUserDetailsManager;
-import org.bana.springboot.security.plugin.usermanager.domain.UserEntity;
-import org.bana.springboot.security.plugin.usermanager.pojo.JpaUser;
-import org.bana.springboot.security.plugin.usermanager.pojo.UserDetailQuery;
+import org.bana.springboot.plugin.security.usermanager.CustomeUserDetailsManager;
+import org.bana.springboot.plugin.security.usermanager.domain.UserEntity;
+import org.bana.springboot.plugin.security.usermanager.pojo.JpaUser;
+import org.bana.springboot.plugin.security.usermanager.pojo.UserDetailQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

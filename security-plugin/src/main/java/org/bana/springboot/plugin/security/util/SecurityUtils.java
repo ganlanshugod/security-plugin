@@ -1,4 +1,4 @@
-package org.bana.springboot.security.plugin.util;
+package org.bana.springboot.plugin.security.util;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

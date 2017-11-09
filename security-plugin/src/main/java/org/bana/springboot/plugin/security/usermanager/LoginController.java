@@ -1,6 +1,6 @@
-package org.bana.springboot.security.plugin.usermanager;
+package org.bana.springboot.plugin.security.usermanager;
 
-import org.bana.springboot.security.plugin.BanaSecurityProperties;
+import org.bana.springboot.plugin.security.BanaSecurityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

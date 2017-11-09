@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
-import org.bana.springboot.security.plugin.RestResponseResult;
+import org.bana.springboot.plugin.RestResponseResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.AbstractErrorController;

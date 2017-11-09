@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.bana.springboot.security.plugin.BanaSecurityAutoConfiguration
+org.bana.springboot.plugin.security.BanaSecurityAutoConfiguration
+org.bana.springboot.plugin.error.BanaExceptionAutoConfiguration

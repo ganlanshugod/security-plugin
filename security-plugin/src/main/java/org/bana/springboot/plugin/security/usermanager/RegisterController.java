@@ -1,10 +1,10 @@
-package org.bana.springboot.security.plugin.usermanager;
+package org.bana.springboot.plugin.security.usermanager;
 
 import javax.validation.Valid;
 
-import org.bana.springboot.security.plugin.BanaSecurityProperties;
-import org.bana.springboot.security.plugin.RestResponseResult;
-import org.bana.springboot.security.plugin.usermanager.pojo.UserDetailRegister;
+import org.bana.springboot.plugin.RestResponseResult;
+import org.bana.springboot.plugin.security.BanaSecurityProperties;
+import org.bana.springboot.plugin.security.usermanager.pojo.UserDetailRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

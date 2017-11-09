@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.bana.springboot.security.plugin.usermanager.pojo;
+package org.bana.springboot.plugin.security.usermanager.pojo;
 
 /**
  * @author liuwenjie
