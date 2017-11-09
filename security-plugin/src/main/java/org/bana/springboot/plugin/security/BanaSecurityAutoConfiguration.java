@@ -1,12 +1,7 @@
 package org.bana.springboot.plugin.security;
 
-import java.util.List;
-
 import javax.sql.DataSource;
 
-import org.bana.common.util.basic.MD5Util;
-import org.bana.springboot.plugin.error.BanaDefaultErrorAttributes;
-import org.bana.springboot.plugin.error.BanaErrorController;
 import org.bana.springboot.plugin.security.usermanager.CustomeUserDetailsManager;
 import org.bana.springboot.plugin.security.usermanager.LoginController;
 import org.bana.springboot.plugin.security.usermanager.RegisterController;
@@ -17,29 +12,21 @@ import org.bana.springboot.plugin.security.usermanager.jpa.UserJpaAutoConfig;
 import org.bana.springboot.plugin.security.usermanager.jpa.UserResponsity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.DispatcherServletAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.ErrorAttributes;
-import org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.ErrorViewResolver;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -129,7 +116,7 @@ public class BanaSecurityAutoConfiguration {
 	@ConditionalOnMissingBean(BanaWebSecurityConfig.class)
 	@ConditionalOnBean(DataSource.class)
 	@ConditionalOnProperty(prefix="bana.springboot.security",value="configType",havingValue="jdbc",matchIfMissing=true)
-	@Order(50)
+	@Order(200)
 	@Import({UserJpaAutoConfig.class})
 	@EnableGlobalMethodSecurity(prePostEnabled = true)//允许进入页面方法前检验
 	public static class BanaJdbcWebSecurityConfigAutoConfig extends BanaWebSecurityConfig{
@@ -138,28 +125,6 @@ public class BanaSecurityAutoConfiguration {
 		private DataSource dataSource;
 		@Autowired
 		private UserResponsity userResponsity;
-		//4
-	    @Override
-	    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//	    	LOG.info("执行了默认的security安全配置，配置认证性质，使用什么内容");
-	    		auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
-	    }
-	    
-	    
-	    @Bean
-	    public PasswordEncoder passwordEncoder(){
-	    	return new PasswordEncoder() {
-				@Override
-				public boolean matches(CharSequence rawPassword, String encodedPassword) {
-					return MD5Util.getMD5UseKey(rawPassword.toString()).equalsIgnoreCase(encodedPassword);
-				}
-				
-				@Override
-				public String encode(CharSequence rawPassword) {
-					return MD5Util.getMD5UseKey(rawPassword.toString());
-				}
-			};
-	    }
 	    
 	    @Bean
 		@Override
@@ -176,8 +141,6 @@ public class BanaSecurityAutoConfiguration {
 			return manager;
 		}
 	}
-	
-	
 	
 }
 
