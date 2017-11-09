@@ -1,14 +1,14 @@
 /**
  * 
  */
-package org.bana.springboot.security.plugin.usermanager.pojo;
+package org.bana.springboot.plugin.security.usermanager.pojo;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import org.bana.springboot.security.plugin.usermanager.domain.UserEntity;
+import org.bana.springboot.plugin.security.usermanager.domain.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

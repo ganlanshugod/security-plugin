@@ -1,4 +1,4 @@
-package org.bana.springboot.security.plugin.usermanager.inmemory;
+package org.bana.springboot.plugin.security.usermanager.inmemory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,8 +9,8 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.bana.springboot.security.plugin.usermanager.CustomeUserDetailsManager;
-import org.bana.springboot.security.plugin.usermanager.pojo.UserDetailQuery;
+import org.bana.springboot.plugin.security.usermanager.CustomeUserDetailsManager;
+import org.bana.springboot.plugin.security.usermanager.pojo.UserDetailQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

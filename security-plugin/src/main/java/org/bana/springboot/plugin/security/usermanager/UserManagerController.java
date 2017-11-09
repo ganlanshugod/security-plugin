@@ -1,15 +1,15 @@
-package org.bana.springboot.security.plugin.usermanager;
+package org.bana.springboot.plugin.security.usermanager;
 
 import java.util.HashSet;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import org.bana.springboot.security.plugin.RestResponseResult;
-import org.bana.springboot.security.plugin.usermanager.pojo.JpaUser;
-import org.bana.springboot.security.plugin.usermanager.pojo.UserDetailAdd;
-import org.bana.springboot.security.plugin.usermanager.pojo.UserDetailQuery;
-import org.bana.springboot.security.plugin.usermanager.pojo.UserDetailUpdate;
+import org.bana.springboot.plugin.RestResponseResult;
+import org.bana.springboot.plugin.security.usermanager.pojo.JpaUser;
+import org.bana.springboot.plugin.security.usermanager.pojo.UserDetailAdd;
+import org.bana.springboot.plugin.security.usermanager.pojo.UserDetailQuery;
+import org.bana.springboot.plugin.security.usermanager.pojo.UserDetailUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

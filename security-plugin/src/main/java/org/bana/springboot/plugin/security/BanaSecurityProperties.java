@@ -1,4 +1,4 @@
-package org.bana.springboot.security.plugin;
+package org.bana.springboot.plugin.security;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

@@ -1,8 +1,8 @@
-package org.bana.springboot.security.plugin.usermanager.jpa;
+package org.bana.springboot.plugin.security.usermanager.jpa;
 
 import org.apache.commons.lang3.StringUtils;
-import org.bana.springboot.security.plugin.usermanager.domain.UserEntity;
-import org.bana.springboot.security.plugin.util.SecurityUtils;
+import org.bana.springboot.plugin.security.usermanager.domain.UserEntity;
+import org.bana.springboot.plugin.security.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;

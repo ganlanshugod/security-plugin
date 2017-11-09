@@ -1,9 +1,9 @@
 /**
  * 
  */
-package org.bana.springboot.security.plugin.usermanager.jpa;
+package org.bana.springboot.plugin.security.usermanager.jpa;
 
-import org.bana.springboot.security.plugin.usermanager.domain.UserEntity;
+import org.bana.springboot.plugin.security.usermanager.domain.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;

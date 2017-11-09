@@ -1,4 +1,4 @@
-package org.bana.springboot.security.plugin;
+package org.bana.springboot.plugin;
 
 import java.io.Serializable;
 

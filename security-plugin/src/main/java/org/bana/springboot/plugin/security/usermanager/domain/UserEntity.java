@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.bana.springboot.security.plugin.usermanager.domain;
+package org.bana.springboot.plugin.security.usermanager.domain;
 
 import java.util.Date;
 import java.util.List;

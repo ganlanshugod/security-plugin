@@ -1,4 +1,4 @@
-package org.bana.springboot.security.plugin;
+package org.bana.springboot.plugin.security;
 
 import java.util.List;
 
@@ -7,14 +7,14 @@ import javax.sql.DataSource;
 import org.bana.common.util.basic.MD5Util;
 import org.bana.springboot.plugin.error.BanaDefaultErrorAttributes;
 import org.bana.springboot.plugin.error.BanaErrorController;
-import org.bana.springboot.security.plugin.usermanager.CustomeUserDetailsManager;
-import org.bana.springboot.security.plugin.usermanager.LoginController;
-import org.bana.springboot.security.plugin.usermanager.RegisterController;
-import org.bana.springboot.security.plugin.usermanager.UserManagerController;
-import org.bana.springboot.security.plugin.usermanager.inmemory.CustomInMemoryUserDetailsManager;
-import org.bana.springboot.security.plugin.usermanager.jpa.JpaUserDetailsManager;
-import org.bana.springboot.security.plugin.usermanager.jpa.UserJpaAutoConfig;
-import org.bana.springboot.security.plugin.usermanager.jpa.UserResponsity;
+import org.bana.springboot.plugin.security.usermanager.CustomeUserDetailsManager;
+import org.bana.springboot.plugin.security.usermanager.LoginController;
+import org.bana.springboot.plugin.security.usermanager.RegisterController;
+import org.bana.springboot.plugin.security.usermanager.UserManagerController;
+import org.bana.springboot.plugin.security.usermanager.inmemory.CustomInMemoryUserDetailsManager;
+import org.bana.springboot.plugin.security.usermanager.jpa.JpaUserDetailsManager;
+import org.bana.springboot.plugin.security.usermanager.jpa.UserJpaAutoConfig;
+import org.bana.springboot.plugin.security.usermanager.jpa.UserResponsity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -48,7 +48,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @ConditionalOnProperty(prefix="bana.springboot.security",value="enabled",matchIfMissing=true)//可以是用bana.springboot.security.enabled=false屏蔽。matchIfMissing在没有配置时是否注入
 @ConditionalOnWebApplication
 @ConditionalOnClass(WebSecurityConfigurerAdapter.class)
-@AutoConfigureBefore(ErrorMvcAutoConfiguration.class)
 @AutoConfigureAfter({DispatcherServletAutoConfiguration.class,DataSourceAutoConfiguration.class})
 public class BanaSecurityAutoConfiguration {
 	
@@ -73,18 +72,7 @@ public class BanaSecurityAutoConfiguration {
 //		}
 //	}
 	
-	@Bean
-	@ConditionalOnMissingBean(value = BanaErrorController.class, search = SearchStrategy.CURRENT)
-	public BanaErrorController basicErrorController(ErrorAttributes errorAttributes,ServerProperties serverProperties, List<ErrorViewResolver> errorViewResolvers) {
-		return new BanaErrorController(errorAttributes, serverProperties.getError(),
-				errorViewResolvers);
-	}
 	
-	@Bean
-	@ConditionalOnMissingBean(value = BanaDefaultErrorAttributes.class, search = SearchStrategy.CURRENT)
-	public BanaDefaultErrorAttributes defaultBanaErrorAttributes(){
-		return new BanaDefaultErrorAttributes();
-	}
 	
 	@Controller
 	@ConditionalOnProperty(prefix="bana.springboot.security",value="defaultController",matchIfMissing=true)
