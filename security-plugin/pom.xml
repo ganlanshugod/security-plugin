@@ -56,6 +56,13 @@
 		<version>1.0.1</version>
 	</dependency>
 	
+	<!-- sitemesh装饰器的使用 -->
+	<dependency>
+	    <groupId>org.sitemesh</groupId>
+	    <artifactId>sitemesh</artifactId>
+	    <version>3.0.1</version>
+	</dependency>
+	
   	<!-- end ===========后台jar包依赖===========end -->
   	<!-- begin ========前端页面的webjar包======== begin -->
   	<!-- 引入这个类，可以去掉引用路径中的版本号，这样可以较好的升级版本信息 -->

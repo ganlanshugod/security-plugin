@@ -2,20 +2,22 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="zh-CN">
 <head>
-	<title>403页面</title>
+	<title>500页面</title>
 	<th:block th:include="bana-security/header :: common-include"></th:block>
 	<link rel="stylesheet" th:href="@{/assets/css/error.css}"/>
 </head>
 <body>
 	<!-- 表格内容 -->
 	<div class="container" style="padding-top:20px" >
-		<img alt="403" th:src="@{/assets/img/error/403_r.jpg}" class="center-block"/>
+		<img alt="403" th:src="@{/assets/img/error/500_r.jpg}" class="center-block"/>
 		<div class="row text-center">
 			<div class="col-12 ">
 				<h1 th:text="${status}">403</h1>
-				<h2 th:text="${message}"></h2><span class="label label-info" th:text="${#dates.format(timestamp, 'yyyy-MM-dd HH:mm:ss')}">Info</span>
+				<h2 >系统错误</h2>
+				<span class="label label-info" th:text="${#dates.format(timestamp, 'yyyy-MM-dd HH:mm:ss')}">Info</span>
 				<!-- <h2 th:text="${error}"></h2> -->
-				<h3>您暂时没有权限访问该页面，建议您检查一下再试</h3>
+				<h3>请求<th:block th:text="${path}"/>发生系统错误</h3>
+				<h3 th:text="${message}"></h3>
 				<a type="button" class="btn btn-warning" href="javascript:history.go(-1);">返回上一步</a>
 			</div>
 		</div>

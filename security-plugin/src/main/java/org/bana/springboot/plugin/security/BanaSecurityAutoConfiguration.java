@@ -59,8 +59,6 @@ public class BanaSecurityAutoConfiguration {
 //		}
 //	}
 	
-	
-	
 	@Controller
 	@ConditionalOnProperty(prefix="bana.springboot.security",value="defaultController",matchIfMissing=true)
 	@ConditionalOnMissingBean(LoginController.class)
