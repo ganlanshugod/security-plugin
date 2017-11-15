@@ -3,6 +3,7 @@
  */
 package org.bana.springboot.plugin.web.sitemesh;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,6 +14,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix="sitemesh")
 public class SitemeshProperties {
+	
+	public static final String DEFAULT_SITEMESH_PATH="/sitemesh/*";
+	
+	public static List<String> banaDecoratorPath = new ArrayList<String>();
+	
+	static{
+		banaDecoratorPath.add("/user/*,/sitemesh/common");
+		banaDecoratorPath.add("/index,/sitemesh/common");
+		banaDecoratorPath.add("/login,/sitemesh/common");
+		banaDecoratorPath.add("/register,/sitemesh/common");
+	}
 
 	private List<String> decoratorPath;
 	

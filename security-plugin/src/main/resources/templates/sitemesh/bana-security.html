@@ -1,0 +1,17 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+  	<head>
+  		 <!-- 装饰器内容head -->
+	  	 <meta content="text/html;charset=UTF-8"/>
+	  	 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+	     <th:block th:include="bana-security/header :: common-include"></th:block>
+	     <title>
+		    <sitemesh:write property='title'/>
+		 </title>
+	     <sitemesh:write property='head' />
+	</head>
+	<body>
+		<!-- 装饰器内容body -->
+		<sitemesh:write property='body' />
+	</body>
+</html>

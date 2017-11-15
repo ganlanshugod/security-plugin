@@ -20,15 +20,25 @@ public class WebSiteMeshFilter extends ConfigurableSiteMeshFilter{
     	if(CollectionUtils.isNotEmpty(decoratorPath)){
     		for (String config : decoratorPath) {
     			if(!config.contains(",")){
-    				throw new IllegalArgumentException("decoratorPath must contains ',' to sqlit to arguments to config!! like '/admin/*,decorator.jsp'");
+    				throw new IllegalArgumentException("decoratorPath" + config + " must contains ',' to sqlit to arguments to config!! like '/admin/*,decorator.jsp'");
     			}
 				String[] split = config.split(",");
 				if(split.length > 2){
-					throw new IllegalArgumentException("decoratorPath must  contains only one ',' to split two arguments");
+					throw new IllegalArgumentException("decoratorPath" + config + " must  contains only one ',' to split two arguments");
 				}
 				builder.addDecoratorPath(split[0], split[1]);
 			}
     	}
+    	for (String string : SitemeshProperties.banaDecoratorPath) {
+    		if(!string.contains(",")){
+				throw new IllegalArgumentException("decoratorPath" + string + " must contains ',' to sqlit to arguments to config!! like '/admin/*,decorator.jsp'");
+			}
+			String[] split = string.split(",");
+			if(split.length > 2){
+				throw new IllegalArgumentException("decoratorPath" + string + " must  contains only one ',' to split two arguments");
+			}
+			builder.addDecoratorPath(split[0], split[1]);
+		}
     	String excludedPath = sitemeshProperties.getExcludedPath();
     	if(StringUtils.isNotEmpty(excludedPath)){
     		String[] split = excludedPath.split(",");
@@ -36,6 +46,8 @@ public class WebSiteMeshFilter extends ConfigurableSiteMeshFilter{
     			 builder.addExcludedPath(string);
 			}
     	}
+    	//排除默认的sitemesh路径
+    	builder.addExcludedPath(SitemeshProperties.DEFAULT_SITEMESH_PATH);
     }
 
 	public SitemeshProperties getSitemeshProperties() {
