@@ -18,7 +18,7 @@ public class UserManagerControllerTest {
 	 */
 	@Test
 	public void testUpdateUser() {
-		fail("Not yet implemented");
+		fail("Not yet implemented...");
 	}
 
 }
